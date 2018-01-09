@@ -84,8 +84,7 @@ MASTER_SIDE_CP_TARGET_LIST := msm8998 # ION specific settings
 PRODUCT_PACKAGES += \
     otapreopt_script \
     cppreopts.sh \
-    update_engine \
-    update_verifier
+    update_engine 
 
 PRODUCT_PACKAGES += \
     bootctrl.msm8998
@@ -97,13 +96,19 @@ AB_OTA_UPDATER := true
 
 AB_OTA_PARTITIONS += \
     boot \
-    system
+    system \
+    vbmeta \
+    dtbo
+
+# A/B OTA dexopt package
+  PRODUCT_PACKAGES += otapreopt_script
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
+
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
