@@ -29,3 +29,7 @@ allow hal_bootctl xbl_block_device:blk_file rw_file_perms;
 
 # Expose a socket for brokered boot message access for hal_oemlock.
 allow hal_bootctl hal_bootctl_socket:sock_file create_file_perms;
+
+# Allow update_engine sys_rawio permissions
+allow hal_bootctl_default self:capability sys_rawio;
+

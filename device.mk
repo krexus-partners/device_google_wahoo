@@ -14,6 +14,9 @@
 # limitations under the License.
 #
 
+LOCAL_PATH := device/google/wahoo
+
+
 PRODUCT_PROPERTY_OVERRIDES += \
     keyguard.no_require_sim=true
 
@@ -84,31 +87,27 @@ MASTER_SIDE_CP_TARGET_LIST := msm8998 # ION specific settings
 PRODUCT_PACKAGES += \
     otapreopt_script \
     cppreopts.sh \
-    update_engine 
+    update_engine \
+    update_verifier
 
 PRODUCT_PACKAGES += \
     bootctrl.msm8998
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cp_system_other_odex=1
+    ro.cp_system_other_odex=0
 
 AB_OTA_UPDATER := true
 
 AB_OTA_PARTITIONS += \
-    boot \
     system \
-    vbmeta \
-    dtbo
-
-# A/B OTA dexopt package
-  PRODUCT_PACKAGES += otapreopt_script
+    boot \
+    vbmeta
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
-
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
@@ -121,9 +120,10 @@ PRODUCT_PACKAGES += \
     update_engine_sideload
 
 # The following modules are included in debuggable builds only.
-PRODUCT_PACKAGES_DEBUG += \
+PRODUCT_PACKAGES += \
     bootctl \
     update_engine_client
+
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \

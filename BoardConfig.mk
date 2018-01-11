@@ -28,10 +28,12 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a73
 
+ifeq ($(TARGET_DEVICE),wahoo)
 BOARD_KERNEL_CMDLINE += androidboot.hardware=$(TARGET_BOOTLOADER_BOARD_NAME) androidboot.console=ttyMSM0,115200,n8
 BOARD_KERNEL_CMDLINE += earlycon=msm_serial_dm,0xc1b0000 enforcing=0 androidboot.selinux=permissive lpm_levels.sleep_disabled=1
 BOARD_KERNEL_CMDLINE += user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 service_locator.enable=1
 BOARD_KERNEL_CMDLINE += swiotlb=2048 firmware_class.path=/vendor/firmware loop.max_part=7 raid=noautodetect
+endif
 
 BOARD_KERNEL_BASE        := 0x00000000
 BOARD_KERNEL_PAGESIZE    := 4096
@@ -46,11 +48,6 @@ BOARD_RAMDISK_OFFSET     := 0x02000000
 endif
 
 TARGET_NO_BOOTLOADER ?= true
-TARGET_NO_KERNEL := false
-AB_OTA_UPDATER := true
-AB_OTA_PARTITIONS := \
-  boot \
-  system
 TARGET_NO_RECOVERY := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
@@ -81,16 +78,18 @@ WITHOUT_CHECK_API := true
 ANDROID_NO_TEST_CHECK := true
 
 # Install odex files into the other system image
-BOARD_USES_SYSTEM_OTHER_ODEX := true
+BOARD_USES_SYSTEM_OTHER_ODEX := false
 
 BOARD_ROOT_EXTRA_FOLDERS := persist firmware metadata
 
+ifeq ($(filter-out wahoo, muskie $(TARGET_PRODUCT)),)
 BOARD_SEPOLICY_DIRS += device/google/wahoo/sepolicy/vendor
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR := device/google/wahoo/sepolicy/public
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR := device/google/wahoo/sepolicy/private
 BOARD_SEPOLICY_DIRS += device/google/wahoo/sepolicy/verizon
-
 BOARD_SEPOLICY_DIRS += device/google/taimen/sepolicy
+endif
+
 TARGET_ANDROID_FILESYSTEM_CONFIG_H := device/google/wahoo/android_filesystem_config.h
 
 QCOM_BOARD_PLATFORMS += msm8998
