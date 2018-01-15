@@ -72,7 +72,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/services/vr/virtual_touchpad/idc/vr-virtual-touchpad-0.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/vr-virtual-touchpad-0.idc \
     frameworks/native/services/vr/virtual_touchpad/idc/vr-virtual-touchpad-1.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/vr-virtual-touchpad-1.idc
 
-ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+ifneq (,$(filter  eng, $(TARGET_BUILD_VARIANT)))
   PRODUCT_COPY_FILES += \
       $(LOCAL_PATH)/init.hardware.diag.rc.userdebug:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.$(PRODUCT_HARDWARE).diag.rc
 else
@@ -90,24 +90,33 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier
 
+#  avb_custom (soon)
+
 PRODUCT_PACKAGES += \
     bootctrl.msm8998
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cp_system_other_odex=0
+    ro.cp_system_other_odex=1
 
 AB_OTA_UPDATER := true
 
 AB_OTA_PARTITIONS += \
     system \
-    boot \
-    vbmeta
+    boot
 
+# A/B OTA dexopt update_engine hookup
 AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system=ext4 \
-    POSTINSTALL_OPTIONAL_system=true
+  RUN_POSTINSTALL_system=true \
+  POSTINSTALL_PATH_system=system/bin/otapreopt_script \
+  FILESYSTEM_TYPE_system=ext4 \
+  POSTINSTALL_OPTIONAL_system=true
+
+# Disable verity and verification checks causing panic
+PRODUCT_PACKAGES += avb_custom \
+AB_OTA_POSTINSTALL_CONFIG += \
+  RUN_POSTINSTALL_system=true \
+  POSTINSTALL_PATH_system=system/bin/avb_custom \
+  FILESYSTEM_TYPE_system=ext4
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
