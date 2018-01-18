@@ -67,7 +67,8 @@ BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-TARGET_USERIMAGES_USE_EXT4 := true
+# DTBO partition definitions
+BOARD_DTBOIMG_PARTITION_SIZE := 8388608
 
 TARGET_COPY_OUT_VENDOR := vendor
 
@@ -78,9 +79,9 @@ WITHOUT_CHECK_API := true
 ANDROID_NO_TEST_CHECK := true
 
 # Install odex files into the other system image
-BOARD_USES_SYSTEM_OTHER_ODEX := false
+BOARD_USES_SYSTEM_OTHER_ODEX := true
 
-BOARD_ROOT_EXTRA_FOLDERS := persist firmware metadata
+BOARD_ROOT_EXTRA_FOLDERS := persist firmware metadata var
 
 ifeq ($(filter-out wahoo, muskie $(TARGET_PRODUCT)),)
 BOARD_SEPOLICY_DIRS += device/google/wahoo/sepolicy/vendor
