@@ -81,7 +81,7 @@ ANDROID_NO_TEST_CHECK := true
 # Install odex files into the other system image
 BOARD_USES_SYSTEM_OTHER_ODEX := true
 
-BOARD_ROOT_EXTRA_FOLDERS := persist firmware metadata var
+BOARD_ROOT_EXTRA_FOLDERS := persist firmware metadata
 
 ifeq ($(filter-out wahoo, muskie $(TARGET_PRODUCT)),)
 BOARD_SEPOLICY_DIRS += device/google/wahoo/sepolicy/vendor
