@@ -90,8 +90,6 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier
 
-#  avb_custom (soon)
-
 PRODUCT_PACKAGES += \
     bootctrl.msm8998
 
@@ -107,16 +105,21 @@ AB_OTA_PARTITIONS += \
 # A/B OTA dexopt update_engine hookup
 AB_OTA_POSTINSTALL_CONFIG += \
   RUN_POSTINSTALL_system=true \
-  POSTINSTALL_PATH_system=system/bin/otapreopt_script \
+  POSTINSTALL_PATH_system=bin/otapreopt_script \
   FILESYSTEM_TYPE_system=ext4 \
   POSTINSTALL_OPTIONAL_system=true
 
-# Disable verity and verification checks causing panic
-PRODUCT_PACKAGES += avb_custom \
+AB_OTA_POSTINSTALL_CONFIG += \
+   RUN_POSTINSTALL_system=true \
+   POSTINSTALL_PATH_system=bin/preloads_copy.sh \
+   FILESYSTEM_TYPE_system=ext4 \
+   POSTINSTALL_OPTIONAL_system=true
+
 AB_OTA_POSTINSTALL_CONFIG += \
   RUN_POSTINSTALL_system=true \
-  POSTINSTALL_PATH_system=system/bin/avb_custom \
+  POSTINSTALL_PATH_system=bin/cppreopts.sh \
   FILESYSTEM_TYPE_system=ext4
+  POSTINSTALL_OPTIONAL_system=true
 
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
@@ -132,7 +135,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     bootctl \
     update_engine_client
-
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
@@ -402,8 +404,6 @@ PRODUCT_PACKAGES += \
 # VR HAL
 PRODUCT_PACKAGES += \
     android.hardware.vr@1.0-service.wahoo \
-# Self Extractor blobs that can be built
-PRODUCT_PACKAGES += \
     com.android.ims.rcsmanager
 
 PRODUCT_COPY_FILES += \
@@ -574,7 +574,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Include vndk/vndk-sp/ll-ndk modules
 PRODUCT_PACKAGES += vndk_package
 
-PRODUCT_ENFORCE_RRO_TARGETS := framework-res
+#PRODUCT_ENFORCE_RRO_TARGETS := framework-res
 
 # Override heap growth limit due to high display density on device
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -626,3 +626,8 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 # audio effects config
 PRODUCT_PROPERTY_OVERRIDES += \
     fmas.hdph_sgain=0
+
+
+# Script that copies preloads directory from system_other to data partition
+PRODUCT_COPY_FILES += \
+    device/google/wahoo/preloads_copy.sh:system/bin/preloads_copy.sh
