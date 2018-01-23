@@ -46,7 +46,7 @@ TARGET_SYSTEM_PROP := $(LOCAL_PATH)/system.prop
 
 # Get kernel-headers
 $(call inherit-product, hardware/qcom/msm8998/msm8998.mk)
-
+#PRODUCT_VENDOR_KERNEL_HEADERS := kernel/google/taimen/include
 $(call inherit-product, device/google/wahoo/utils.mk)
 
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -105,19 +105,19 @@ AB_OTA_PARTITIONS += \
 # A/B OTA dexopt update_engine hookup
 AB_OTA_POSTINSTALL_CONFIG += \
   RUN_POSTINSTALL_system=true \
-  POSTINSTALL_PATH_system=bin/otapreopt_script \
+  POSTINSTALL_PATH_system=system/bin/otapreopt_script \
   FILESYSTEM_TYPE_system=ext4 \
   POSTINSTALL_OPTIONAL_system=true
 
 AB_OTA_POSTINSTALL_CONFIG += \
    RUN_POSTINSTALL_system=true \
-   POSTINSTALL_PATH_system=bin/preloads_copy.sh \
+   POSTINSTALL_PATH_system=system/bin/preloads_copy.sh \
    FILESYSTEM_TYPE_system=ext4 \
    POSTINSTALL_OPTIONAL_system=true
 
 AB_OTA_POSTINSTALL_CONFIG += \
   RUN_POSTINSTALL_system=true \
-  POSTINSTALL_PATH_system=bin/cppreopts.sh \
+  POSTINSTALL_PATH_system=system/bin/cppreopts.sh \
   FILESYSTEM_TYPE_system=ext4
   POSTINSTALL_OPTIONAL_system=true
 
@@ -292,7 +292,8 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.mapper@2.0-impl \
-    libbt-vendor
+    libbt-vendor \
+    libion
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
